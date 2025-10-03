@@ -91,10 +91,11 @@ function analyzeSalesData(data, options) {
             if (!product) return;
 
             const itemRevenue = calculateRevenue(item, product);
-            seller.revenue += itemRevenue;
+            // Округляем значения при добавлении, чтобы избежать накопления ошибок
+            seller.revenue = Math.round((seller.revenue + itemRevenue) * 100) / 100;
 
             const cost = product.purchase_price * item.quantity;
-            seller.profit += itemRevenue - cost;
+            seller.profit = Math.round((seller.profit + (itemRevenue - cost)) * 100) / 100;
 
             if (!seller.products_sold[item.sku]) {
                 seller.products_sold[item.sku] = 0;
@@ -120,10 +121,10 @@ function analyzeSalesData(data, options) {
     return sellerStats.map(seller => ({
         seller_id: seller.id,
         name: seller.name,
-        revenue: +seller.revenue.toFixed(2),
-        profit: +seller.profit.toFixed(2),
+        revenue: Math.round(seller.revenue * 100) / 100,
+        profit: Math.round(seller.profit * 100) / 100,
         sales_count: seller.sales_count,
         top_products: seller.top_products,
-        bonus: +seller.bonus.toFixed(2)
+        bonus: Math.round(seller.bonus * 100) / 100
     }));
 }
