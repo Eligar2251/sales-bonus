@@ -3,7 +3,7 @@
  * @param purchase запись о покупке
  * @param _product карточка товара
  * @returns {number}
- */
+ **/
 function calculateSimpleRevenue(purchase, _product) {
     // @TODO: Расчет выручки от операции
     const { discount, sale_price, quantity } = purchase;
@@ -17,7 +17,7 @@ function calculateSimpleRevenue(purchase, _product) {
  * @param total общее число продавцов
  * @param seller карточка продавца
  * @returns {number}
- */
+ **/
 function calculateBonusByProfit(index, total, seller) {
     // @TODO: Расчет бонуса от позиции в рейтинге
     const { profit } = seller;
