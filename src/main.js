@@ -3,12 +3,12 @@
  * @param purchase запись о покупке
  * @param _product карточка товара
  * @returns {number}
- **/
+ */
 function calculateSimpleRevenue(purchase, _product) {
-    // @TODO: Расчет выручки от операции
-    const { discount, sale_price, quantity } = purchase;
-    const discountMultiplier = 1 - discount / 100;
-    return sale_price * quantity * discountMultiplier;
+   // @TODO: Расчет выручки от операции
+   const { discount, sale_price, quantity } = purchase;
+   const discountMultiplier = 1 - discount / 100;
+   return sale_price * quantity * discountMultiplier;
 }
 
 /**
@@ -17,7 +17,7 @@ function calculateSimpleRevenue(purchase, _product) {
  * @param total общее число продавцов
  * @param seller карточка продавца
  * @returns {number}
- **/
+ */
 function calculateBonusByProfit(index, total, seller) {
     // @TODO: Расчет бонуса от позиции в рейтинге
     const { profit } = seller;
@@ -86,6 +86,8 @@ function analyzeSalesData(data, options) {
 
         seller.sales_count += 1;
 
+        seller.revenue += record.total_amount;
+
         record.items.forEach(item => {
             const product = productIndex[item.sku];
             if (!product) return;
@@ -94,7 +96,6 @@ function analyzeSalesData(data, options) {
             const itemCost = product.purchase_price * item.quantity;
             const itemProfit = itemRevenue - itemCost;
 
-            seller.revenue += itemRevenue;
             seller.profit += itemProfit;
 
             if (!seller.products_sold[item.sku]) {
