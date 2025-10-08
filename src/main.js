@@ -5,10 +5,10 @@
  * @returns {number}
  */
 function calculateSimpleRevenue(purchase, _product) {
-   // @TODO: Расчет выручки от операции
-   const { discount, sale_price, quantity } = purchase;
-   const discountMultiplier = 1 - discount / 100;
-   return sale_price * quantity * discountMultiplier;
+    // @TODO: Расчет выручки от операции
+    const { discount, sale_price, quantity } = purchase;
+    const discountMultiplier = 1 - discount / 100;
+    return sale_price * quantity * discountMultiplier;
 }
 
 /**
@@ -91,11 +91,11 @@ function analyzeSalesData(data, options) {
             if (!product) return;
 
             const itemRevenue = calculateRevenue(item, product);
-            // Округляем значения при добавлении, чтобы избежать накопления ошибок
-            seller.revenue = Math.round((seller.revenue + itemRevenue) * 100) / 100;
+            const itemCost = product.purchase_price * item.quantity;
+            const itemProfit = itemRevenue - itemCost;
 
-            const cost = product.purchase_price * item.quantity;
-            seller.profit = Math.round((seller.profit + (itemRevenue - cost)) * 100) / 100;
+            seller.revenue += itemRevenue;
+            seller.profit += itemProfit;
 
             if (!seller.products_sold[item.sku]) {
                 seller.products_sold[item.sku] = 0;
@@ -121,10 +121,10 @@ function analyzeSalesData(data, options) {
     return sellerStats.map(seller => ({
         seller_id: seller.id,
         name: seller.name,
-        revenue: Math.round(seller.revenue * 100) / 100,
-        profit: Math.round(seller.profit * 100) / 100,
+        revenue: Number(seller.revenue.toFixed(2)),
+        profit: Number(seller.profit.toFixed(2)),
         sales_count: seller.sales_count,
         top_products: seller.top_products,
-        bonus: Math.round(seller.bonus * 100) / 100
+        bonus: Number(seller.bonus.toFixed(2))
     }));
 }
